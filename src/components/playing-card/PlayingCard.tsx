@@ -1,29 +1,38 @@
-import React from 'react';
-import {
-  HoverCard,
-  HoverCardTrigger,
-} from '@radix-ui/react-hover-card';
-import './PlayingCard.css'
+import React from "react";
+import { HoverCard, HoverCardTrigger } from "@radix-ui/react-hover-card";
+import "./PlayingCard.css";
+import { CardSuit, CardValue } from "../../types/card";
 
 interface PlayingCardProps {
-  rank: string;
-  suit: string;
+  value: CardValue;
+  suit: CardSuit;
 }
 
-const suitMapping: { [key: string]: string } = {
-  hearts: "❤️",  // Heart icon
-  diamonds: "♦️", // Diamond icon
-  clubs: "♣️",    // Club icon
-  spades: "♠️",   // Spade icon
+const suitMapping: { [key in CardSuit]: string } = {
+  2: "❤️", // Heart icon
+  1: "♦️", // Diamond icon
+  3: "♣️", // Club icon
+  0: "♠️", // Spade icon
 };
 
-const PlayingCard: React.FC<PlayingCardProps> = ({ rank, suit }) => {
+const valueMapping: { [key in CardValue]: string } = {
+  7: "7",
+  8: "8",
+  9: "9",
+  10: "T",
+  11: "J",
+  12: "Q",
+  13: "K",
+  14: "A",
+};
+
+const PlayingCard: React.FC<PlayingCardProps> = ({ value, suit }) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <div className="playing-card">
-          <h3 className="card-rank-left">{rank}</h3>
-          <h3 className="card-rank-right">{rank}</h3>
+          <h3 className="card-rank-left">{valueMapping[value]}</h3>
+          <h3 className="card-rank-right">{valueMapping[value]}</h3>
           <h3 className="card-suit">{suitMapping[suit]}</h3>
         </div>
       </HoverCardTrigger>

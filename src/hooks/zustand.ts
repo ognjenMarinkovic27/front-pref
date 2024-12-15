@@ -10,7 +10,21 @@ interface ObjMap<T = any> {
 
 type SendFn = <T extends OutgoingMessage>(message: T) => void;
 
-interface GameState {
+export const GameState = {
+  Waiting: 0,
+  Bidding: 1,
+  PlayNow: 2,
+  ClaimPlayNowType: 3,
+  ChoosingGameType: 4,
+  RespondingToGameType: 5,
+  ChoosingCards: 6,
+  PlayingHand: 7,
+} as const;
+
+export type GameState = (typeof GameState)[keyof typeof GameState];
+
+interface GameStoreState {
+  state: GameState;
   dealerPlayerPid: string;
   handState: HandState;
   readyPids: ObjMap<boolean>;
@@ -23,6 +37,7 @@ interface GameState {
 
 interface GameActions {
   start: () => void;
+  setState: (gameState: GameState) => void;
   makeReady: (pid: string) => void;
   startNewHand: (firstPlayerPid: string) => void;
   startNewRound: (firstPlayerPid: string) => void;
@@ -40,6 +55,7 @@ interface GameActions {
 }
 
 const dummyStartState = {
+  state: GameState.Waiting,
   dealerPlayerPid: "",
   readyPids: {},
   handState: {
@@ -60,12 +76,16 @@ const dummyStartState = {
   },
 };
 
-const useGameStore = create<GameState & GameActions>()(
+const useGameStore = create<GameStoreState & GameActions>()(
   immer((set) => ({
     ...dummyStartState,
     start: () =>
       set((state) => {
         state.started = true;
+      }),
+    setState: (gameState: GameState) =>
+      set((state) => {
+        state.state = gameState;
       }),
     makeReady: (pid: string) =>
       set((state) => {

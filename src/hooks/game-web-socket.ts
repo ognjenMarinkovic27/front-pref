@@ -13,6 +13,8 @@ import {
 import { readyHandler } from "../msg-handlers/ready";
 import useGameStore from "./zustand";
 import { startGameHandler } from "../msg-handlers/start-game";
+import { sendCardsHandler } from "../msg-handlers/send-cards";
+import { startHandHandler } from "../msg-handlers/start-hand";
 
 type MessageHandler<T> = (payload: T) => void;
 
@@ -34,6 +36,8 @@ function useGameWebSocket(pid: string | undefined) {
       "player-disconnected": disconnectedHandler,
       "ready-notif": readyHandler,
       "start-game": startGameHandler,
+      "start-hand": startHandHandler,
+      "send-cards": sendCardsHandler,
     }
   );
 
