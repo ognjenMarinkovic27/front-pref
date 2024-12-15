@@ -1,0 +1,17 @@
+.hidden-card {
+  position: relative;
+  background: var(--accent-10);
+  outline: 5px solid white;
+  outline-offset: -5px;
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-3);
+  padding: var(--space-2);
+  width: 3.5em;
+  height: 5em;
+  text-align: center;
+  transition: transform var(--duration-200), box-shadow var(--duration-200);
+  font-family: var(--font-family-base);
+  margin-left: calc(-1 * var(--space-3));
+  margin-right: calc(-1 * var(--space-3));
+}
+

@@ -1,0 +1,45 @@
+.playing-card {
+  position: relative;
+  background: var(--color-panel-solid);
+  border: 1px solid var(--gray-6);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-3);
+  padding: var(--space-2);
+  width: 3.5em;
+  height: 5em;
+  text-align: center;
+  cursor: pointer;
+  transition: transform var(--duration-200), box-shadow var(--duration-200);
+  font-family: var(--font-family-base);
+  margin-left: calc(-1 * var(--space-3));
+  margin-right: calc(-1 * var(--space-3));
+}
+
+.playing-card:hover {
+  transform: translateY(calc(-1 * var(--space-2)));
+  box-shadow: var(--shadow-4);
+}
+
+.card-rank-left, .card-rank-right, .card-suit {
+  position: absolute;
+  font-size: var(--font-size-3);
+  margin: 0;
+  color: var(--color-text);
+}
+
+.card-rank-left {
+  top: var(--space-1);
+  left: var(--space-1);
+}
+
+.card-rank-right {
+  bottom: var(--space-1);
+  right: var(--space-1);
+}
+
+.card-suit {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
