@@ -13,15 +13,23 @@ function Choices() {
 
   const choiceHandlers = useChoiceHandlers();
   function handleChoice(label: string) {
-    choiceHandlers[gameState](label);
+    if (choiceHandlers[gameState]) {
+      choiceHandlers[gameState](label);
+    } else {
+      console.warn("No choice handler for game state " + gameState);
+    }
   }
 
   const [labels, setLabels] = useState([] as Array<string>);
   const labelHandlers = useLabelHandlers(setLabels);
 
   useEffect(() => {
-    labelHandlers[gameState]();
-  }, [gameState, currentBidder]);
+    if (labelHandlers[gameState]) {
+      labelHandlers[gameState]();
+    } else {
+      console.warn("No label handler for game state " + gameState);
+    }
+  }, [gameState, currentBidder, labelHandlers]);
 
   return (
     <Box width="10em" mt="auto">

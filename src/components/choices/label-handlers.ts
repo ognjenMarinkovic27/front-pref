@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useGameStore, { GameState } from "../../hooks/zustand";
 import { GameType, ObjMap } from "../../types/hand";
 import { useShallow } from "zustand/shallow";
@@ -12,7 +12,7 @@ const gameTypeLabels = Object.keys(GameType);
 type setLabelsFn = React.Dispatch<React.SetStateAction<string[]>>;
 
 function useLabelHandlers(setLabels: setLabelsFn) {
-  const handlers: HandlerMap = {};
+  const [handlers, setHandlers] = useState({} as HandlerMap);
 
   const [firstBidderPid, pids, passedPids, currentBid] = useGameStore(
     useShallow((state) => [
@@ -24,7 +24,9 @@ function useLabelHandlers(setLabels: setLabelsFn) {
   );
 
   useEffect(() => {
-    handlers[GameState.Bidding] = () => {
+    const h: HandlerMap = {};
+
+    h[GameState.Bidding] = () => {
       const { nextBid, dontIncreaseBid } = calculateNextBid(
         firstBidderPid,
         pids,
@@ -42,15 +44,17 @@ function useLabelHandlers(setLabels: setLabelsFn) {
       setLabels(labels);
     };
 
-    handlers[GameState.ChoosingCards] = () => {
+    h[GameState.ChoosingGameType] = () => {
       const bid = currentBid;
       console.log(gameTypeLabels.slice(bid - 2));
       setLabels(gameTypeLabels.slice(bid - 2));
     };
 
-    handlers[GameState.RespondingToGameType] = () => {
+    h[GameState.RespondingToGameType] = () => {
       setLabels(["Coming :)", "Not Coming !!! :("]);
     };
+
+    setHandlers(h);
   }, []);
 
   return handlers;

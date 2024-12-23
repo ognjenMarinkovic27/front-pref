@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useGameStore, { GameState } from "../../hooks/zustand";
 import { GameType, isGameTypeLabel } from "../../types/hand";
 
@@ -7,17 +7,19 @@ type HandlerMap = {
 };
 
 function useChoiceHandlers() {
-  const handlers: HandlerMap = {};
+  const [handlers, setHandlers] = useState({} as HandlerMap);
 
   const send = useGameStore((state) => state.send);
 
   useEffect(() => {
-    handlers[GameState.Bidding] = (label) => {
+    const h: HandlerMap = {};
+
+    h[GameState.Bidding] = (label) => {
       const type = label == "Pass" ? "pass-bid" : "bid";
       send({ type, seq: 0 });
     };
 
-    handlers[GameState.ChoosingCards] = (label) => {
+    h[GameState.ChoosingGameType] = (label) => {
       if (!isGameTypeLabel(label)) {
         console.error("Invalid Game Type");
         return;
@@ -31,6 +33,8 @@ function useChoiceHandlers() {
         seq: 0,
       });
     };
+
+    setHandlers(h);
   }, []);
 
   return handlers;
