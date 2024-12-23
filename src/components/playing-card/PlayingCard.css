@@ -8,14 +8,17 @@
   width: 3.5em;
   height: 5em;
   text-align: center;
-  cursor: pointer;
   transition: transform var(--duration-200), box-shadow var(--duration-200);
   font-family: var(--font-family-base);
   margin-left: calc(-1 * var(--space-3));
   margin-right: calc(-1 * var(--space-3));
 }
 
-.playing-card:hover {
+.clickable-card {
+  cursor: pointer;
+}
+
+.clickable-card:hover {
   transform: translateY(calc(-1 * var(--space-2)));
   box-shadow: var(--shadow-4);
 }

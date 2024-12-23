@@ -12,12 +12,14 @@ export function startGameHandler(message: IncomingMessage) {
   const state = store.getState();
 
   const pidOrder = message.payload.pidOrder;
-  const myIndex = pidOrder.indexOf(state.pid);
+  const myIndex = pidOrder.indexOf(state.pids[0]);
   const displayOrder = [
-    ...pidOrder.splice(myIndex + 1),
-    ...pidOrder.splice(0, myIndex),
+    state.pids[0],
+    ...pidOrder.slice(myIndex + 1),
+    ...pidOrder.slice(0, myIndex),
   ];
 
-  state.setOtherPids(displayOrder);
+  state.setPids(displayOrder);
+  state.setDealerPid(pidOrder[0]);
   state.start();
 }

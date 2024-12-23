@@ -1,4 +1,4 @@
-import { GameState, store } from "../hooks/zustand.ts";
+import { store } from "../hooks/zustand.ts";
 import { IncomingMessage } from "../types/messages/messages.ts";
 import { isStartHandMessage } from "../types/messages/start-hand.ts";
 
@@ -9,7 +9,7 @@ export function startHandHandler(message: IncomingMessage) {
     return;
   }
 
-  const setState = store.getState().setState;
+  const startNewHand = store.getState().startNewHand;
 
-  setState(GameState.Bidding);
+  startNewHand(message.payload.firstPid);
 }

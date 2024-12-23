@@ -10,13 +10,13 @@ import LobbyScreen from "../../components/lobby-screen/LobbyScreen";
 
 function Game() {
   const [pid, started] = useGameStore(
-    useShallow((state) => [state.pid, state.started])
+    useShallow((state) => [state.pids[0], state.started])
   );
 
   const nav = useNavigate();
 
   useEffect(() => {
-    if (pid == "") {
+    if (pid == undefined) {
       nav("/");
     }
   }, []);

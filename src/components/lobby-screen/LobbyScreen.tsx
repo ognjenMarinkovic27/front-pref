@@ -4,14 +4,11 @@ import { useShallow } from "zustand/shallow";
 import { Text } from "@radix-ui/themes";
 
 function LobbyScreen() {
-  const [pid, otherPids, readyPids, send] = useGameStore(
-    useShallow((state) => [
-      state.pid,
-      state.otherPids,
-      state.readyPids,
-      state.send,
-    ])
+  const [pids, readyPids, send] = useGameStore(
+    useShallow((state) => [state.pids, state.readyPids, state.send])
   );
+
+  const myPid = pids[0];
 
   function handleReadyClick() {
     send({
@@ -27,16 +24,16 @@ function LobbyScreen() {
     <Flex direction="column">
       <Button onClick={handleReadyClick}>Ready</Button>
       <Text>
-        {pid} - {readyPids[pid] != undefined ? "READY" : "NOT READY"}
+        {myPid} - {readyPids[myPid] != undefined ? "READY" : "NOT READY"}
       </Text>
       <Text>Ready Players:</Text>
-      {otherPids
+      {pids
         .filter((pid) => readyPids[pid] != undefined)
         .map((pid) => (
           <Text key={pid}>{pid}</Text>
         ))}
       <Text>Not Ready Players:</Text>
-      {otherPids
+      {pids
         .filter((pid) => readyPids[pid] == undefined)
         .map((pid) => (
           <Text key={pid}>{pid}</Text>

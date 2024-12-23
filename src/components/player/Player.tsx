@@ -1,8 +1,9 @@
 import { Flex, Text } from "@radix-ui/themes";
-import useGameStore from "../../hooks/zustand";
+import useGameStore, { GameState } from "../../hooks/zustand";
 import { useShallow } from "zustand/shallow";
-import HiddenCardHand from "../hidden-card-hand/hidden-card-hand";
-import PlayingCard from "../playing-card/PlayingCard";
+import HiddenCardHand from "../hidden-card-hand/HiddenCardHand";
+import CardHand from "../card-hand/CardHand";
+import Card from "../../types/card";
 
 interface PlayerProps {
   name: string;
@@ -10,15 +11,23 @@ interface PlayerProps {
 }
 
 function Player({ name, hiddenCards }: PlayerProps) {
-  const [cards, rounds, played] = useGameStore(
+  const [cards, rounds, played, gameState, discardCard] = useGameStore(
     useShallow((state) => [
       state.cards,
       state.handState.currentRound,
       state.handState.playedCards,
+      state.gameState,
+      state.discardCard,
     ])
   );
   // TODO: kinda ugly
   const cardCount = 10 - rounds - (played.name != undefined ? 1 : 0);
+
+  function handleClick(card: Card) {
+    if (gameState == GameState.ChoosingCards) {
+      discardCard(card);
+    }
+  }
 
   return (
     <Flex
@@ -32,11 +41,7 @@ function Player({ name, hiddenCards }: PlayerProps) {
       {hiddenCards ? (
         <HiddenCardHand count={cardCount} />
       ) : (
-        <Flex>
-          {cards.map((card, ind) => (
-            <PlayingCard key={ind} value={card.value} suit={card.suit} />
-          ))}
-        </Flex>
+        <CardHand cards={cards} onClick={handleClick} />
       )}
     </Flex>
   );

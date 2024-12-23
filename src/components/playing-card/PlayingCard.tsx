@@ -1,11 +1,12 @@
 import React from "react";
 import { HoverCard, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import "./PlayingCard.css";
-import { CardSuit, CardValue } from "../../types/card";
+import Card, { CardSuit, CardValue } from "../../types/card";
 
 interface PlayingCardProps {
   value: CardValue;
   suit: CardSuit;
+  onClick?: (card: Card) => void;
 }
 
 const suitMapping: { [key in CardSuit]: string } = {
@@ -26,11 +27,20 @@ const valueMapping: { [key in CardValue]: string } = {
   14: "A",
 };
 
-const PlayingCard: React.FC<PlayingCardProps> = ({ value, suit }) => {
+const PlayingCard: React.FC<PlayingCardProps> = ({ value, suit, onClick }) => {
+  function handleClick() {
+    if (onClick) {
+      onClick({ value, suit });
+    }
+  }
+
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <div className="playing-card">
+        <div
+          onClick={handleClick}
+          className={`playing-card ${onClick != undefined ? "clickable-card" : ""}`}
+        >
           <h3 className="card-rank-left">{valueMapping[value]}</h3>
           <h3 className="card-rank-right">{valueMapping[value]}</h3>
           <h3 className="card-suit">{suitMapping[suit]}</h3>

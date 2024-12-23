@@ -15,6 +15,11 @@ import useGameStore from "./zustand";
 import { startGameHandler } from "../msg-handlers/start-game";
 import { sendCardsHandler } from "../msg-handlers/send-cards";
 import { startHandHandler } from "../msg-handlers/start-hand";
+import { newbidHandler } from "../msg-handlers/new-bid";
+import { playerPassedHandler } from "../msg-handlers/player-passed";
+import { choosingCardsHandler } from "../msg-handlers/choosing-cards";
+import { gameStateHandler } from "../msg-handlers/game-state";
+import { gameTypeHandler } from "../msg-handlers/game-type";
 
 type MessageHandler<T> = (payload: T) => void;
 
@@ -38,6 +43,11 @@ function useGameWebSocket(pid: string | undefined) {
       "start-game": startGameHandler,
       "start-hand": startHandHandler,
       "send-cards": sendCardsHandler,
+      "new-bid": newbidHandler,
+      "player-passed": playerPassedHandler,
+      "choosing-cards": choosingCardsHandler,
+      "game-state": gameStateHandler,
+      "game-type": gameTypeHandler,
     }
   );
 

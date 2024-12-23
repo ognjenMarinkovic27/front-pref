@@ -9,8 +9,10 @@ export function lobbyHandler(message: IncomingMessage) {
     return;
   }
 
-  const pid = store.getState().pid;
-  const setOtherPids = store.getState().setOtherPids;
+  const state = store.getState();
+  const addPid = state.addPid;
 
-  setOtherPids(message.payload.pids.filter((opid) => opid != pid));
+  message.payload.pids.map((pid) => {
+    if (pid != state.pids[0]) addPid(pid);
+  });
 }

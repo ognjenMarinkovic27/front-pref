@@ -12,8 +12,16 @@ export function connectedHandler(message: IncomingMessage) {
     return;
   }
 
-  const addOtherPid = store.getState().addOtherPid;
-  addOtherPid(message.payload.pid);
+  const newPid = message.payload.pid;
+  const state = store.getState();
+
+  /* After we connect the server responds with player-connected 
+  for our connection as well. We want to ignore this message. I
+  left it this way for possibly implementing acks. */
+  if (newPid != state.pids[0]) {
+    const addPid = store.getState().addPid;
+    addPid(message.payload.pid);
+  }
 }
 
 export function disconnectedHandler(message: IncomingMessage) {
@@ -23,6 +31,6 @@ export function disconnectedHandler(message: IncomingMessage) {
     return;
   }
 
-  const removeOtherPid = store.getState().removeOtherPid;
-  removeOtherPid(message.payload.pid);
+  const removePid = store.getState().removePid;
+  removePid(message.payload.pid);
 }
