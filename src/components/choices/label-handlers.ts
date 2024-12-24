@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import useGameStore, { GameState } from "../../hooks/zustand";
 import { GameType, ObjMap } from "../../types/hand";
 import { useShallow } from "zustand/shallow";
 
 type HandlerMap = {
-  [key: number]: () => void;
+  [K in GameState]?: () => void;
 };
 
 const gameTypeLabels = Object.keys(GameType);
@@ -12,8 +12,6 @@ const gameTypeLabels = Object.keys(GameType);
 type setLabelsFn = React.Dispatch<React.SetStateAction<string[]>>;
 
 function useLabelHandlers(setLabels: setLabelsFn) {
-  const [handlers, setHandlers] = useState({} as HandlerMap);
-
   const [firstBidderPid, pids, passedPids, currentBid] = useGameStore(
     useShallow((state) => [
       state.handState.firstBidderPid,
@@ -23,10 +21,8 @@ function useLabelHandlers(setLabels: setLabelsFn) {
     ])
   );
 
-  useEffect(() => {
-    const h: HandlerMap = {};
-
-    h[GameState.Bidding] = () => {
+  const handlers = useRef<HandlerMap>({
+    [GameState.Bidding]: () => {
       const { nextBid, dontIncreaseBid } = calculateNextBid(
         firstBidderPid,
         pids,
@@ -42,22 +38,18 @@ function useLabelHandlers(setLabels: setLabelsFn) {
       labels.push("Pass");
 
       setLabels(labels);
-    };
-
-    h[GameState.ChoosingGameType] = () => {
+    },
+    [GameState.ChoosingGameType]: () => {
       const bid = currentBid;
-      console.log(gameTypeLabels.slice(bid - 2));
-      setLabels(gameTypeLabels.slice(bid - 2));
-    };
-
-    h[GameState.RespondingToGameType] = () => {
+      console.log(gameTypeLabels.slice(bid - 1));
+      setLabels(gameTypeLabels.slice(bid - 1));
+    },
+    [GameState.RespondingToGameType]: () => {
       setLabels(["Coming :)", "Not Coming !!! :("]);
-    };
+    },
+  });
 
-    setHandlers(h);
-  }, []);
-
-  return handlers;
+  return handlers.current;
 }
 
 function calculateNextBid(
