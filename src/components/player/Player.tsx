@@ -11,17 +11,9 @@ interface PlayerProps {
 }
 
 function Player({ name, hiddenCards }: PlayerProps) {
-  const [cards, rounds, played, gameState, discardCard] = useGameStore(
-    useShallow((state) => [
-      state.cards,
-      state.handState.currentRound,
-      state.handState.playedCards,
-      state.gameState,
-      state.discardCard,
-    ])
+  const [cards, gameState, discardCard] = useGameStore(
+    useShallow((state) => [state.cards, state.gameState, state.discardCard])
   );
-  // TODO: kinda ugly
-  const cardCount = 10 - rounds - (played.name != undefined ? 1 : 0);
 
   function handleClick(card: Card) {
     if (gameState == GameState.ChoosingCards) {
@@ -39,7 +31,7 @@ function Player({ name, hiddenCards }: PlayerProps) {
     >
       <Text>{name}</Text>
       {hiddenCards ? (
-        <HiddenCardHand count={cardCount} />
+        <HiddenCardHand />
       ) : (
         <CardHand cards={cards} onClick={handleClick} />
       )}

@@ -1,11 +1,18 @@
 import { Flex } from "@radix-ui/themes";
 import HiddenCard from "../hideen-card/HiddenCard";
+import useGameStore from "../../hooks/zustand";
+import { useShallow } from "zustand/shallow";
 
-interface HiddenCardHandProps {
-  count: number;
-}
+function HiddenCardHand() {
+  const [rounds, played] = useGameStore(
+    useShallow((state) => [
+      state.handState.currentRound,
+      state.handState.playedCards,
+    ])
+  );
+  // TODO: kinda ugly
+  const count = 10 - rounds - (played.name != undefined ? 1 : 0);
 
-function HiddenCardHand({ count }: HiddenCardHandProps) {
   return (
     <Flex direction={{ initial: "column", lg: "row" }}>
       {Array.from({ length: count }, (_, i) => (
