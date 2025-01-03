@@ -21,8 +21,10 @@ function CardHand({ cards, onClick }: CardHandProps) {
       {sortedCards.map((card, ind) => (
         <PlayingCard
           key={ind}
-          value={card.value}
-          suit={card.suit}
+          card={{
+            value: card.value,
+            suit: card.suit,
+          }}
           onClick={onClick}
         />
       ))}

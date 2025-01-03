@@ -4,6 +4,7 @@ import useGameStore, { GameState } from "../../hooks/zustand";
 import { useShallow } from "zustand/shallow";
 import Choices from "../choices/Choices";
 import ChooseCards from "../choose-cards/ChooseCards";
+import CardTable from "../card-table/CardTable";
 
 function PlayingBoard() {
   const [pids, current, bid, bidder, gameState] = useGameStore(
@@ -18,6 +19,17 @@ function PlayingBoard() {
 
   const myTurn = pids[0] == current;
 
+  function renderCenter() {
+    switch (gameState) {
+      case GameState.ChoosingCards:
+        return <ChooseCards />;
+      case GameState.PlayingHand:
+        return <CardTable />;
+      default:
+        return myTurn ? <Choices /> : <></>;
+    }
+  }
+
   return (
     <Box
       className="main-container"
@@ -27,16 +39,13 @@ function PlayingBoard() {
       <Box height="100%" maxWidth="1400px" m="auto">
         <Flex height="50%" justify="between">
           <Player name={pids[1]} hiddenCards={true} />
-          {gameState == GameState.ChoosingCards ? (
-            <ChooseCards />
-          ) : myTurn ? (
-            <Choices />
-          ) : (
+          <Flex direction="column">
             <Text>
               Na potezu: {current}.<br />
               Bid info: {bid} {bidder}{" "}
             </Text>
-          )}
+            {renderCenter()}
+          </Flex>
           <Player name={pids[2]} hiddenCards={true} />
         </Flex>
         <Flex height="50%" justify="center">

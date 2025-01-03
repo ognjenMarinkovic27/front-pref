@@ -45,7 +45,7 @@ function useLabelHandlers(setLabels: setLabelsFn) {
       setLabels(gameTypeLabels.slice(bid - 1));
     },
     [GameState.RespondingToGameType]: () => {
-      setLabels(["Coming :)", "Not Coming !!! :("]);
+      setLabels(["Going", "Not Going"]);
     },
   });
 

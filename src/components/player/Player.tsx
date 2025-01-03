@@ -11,13 +11,37 @@ interface PlayerProps {
 }
 
 function Player({ name, hiddenCards }: PlayerProps) {
-  const [cards, gameState, discardCard] = useGameStore(
-    useShallow((state) => [state.cards, state.gameState, state.discardCard])
-  );
+  const [pid, myTurn, cards, gameState, discardCard, playCard, send] =
+    useGameStore(
+      useShallow((state) => [
+        state.pids[0],
+        state.pids[0] == state.handState.currentPlayerPid,
+        state.cards,
+        state.gameState,
+        state.discardCard,
+        state.playCard,
+        state.send,
+      ])
+    );
 
   function handleClick(card: Card) {
-    if (gameState == GameState.ChoosingCards) {
-      discardCard(card);
+    if (!myTurn) return;
+
+    switch (gameState) {
+      case GameState.ChoosingCards:
+        discardCard(card);
+        break;
+      case GameState.PlayingHand:
+        playCard(pid, card);
+        send({
+          type: "play-card",
+          payload: {
+            card,
+          },
+          seq: 0,
+        });
+        break;
+      default:
     }
   }
 

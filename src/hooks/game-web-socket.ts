@@ -20,6 +20,7 @@ import { playerPassedHandler } from "../msg-handlers/player-passed";
 import { choosingCardsHandler } from "../msg-handlers/choosing-cards";
 import { gameStateHandler } from "../msg-handlers/game-state";
 import { gameTypeHandler } from "../msg-handlers/game-type";
+import { playerGoingHandler } from "../msg-handlers/player-going";
 
 type MessageHandler<T> = (payload: T) => void;
 
@@ -48,6 +49,7 @@ function useGameWebSocket(pid: string | undefined) {
       "choosing-cards": choosingCardsHandler,
       "game-state": gameStateHandler,
       "game-type": gameTypeHandler,
+      "player-going": playerGoingHandler,
     }
   );
 

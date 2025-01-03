@@ -6,6 +6,7 @@ import { GameStateMessage } from "./game-state.ts";
 import { GameTypeMessage } from "./game-type.ts";
 import { LobbyMessage } from "./lobby.ts";
 import { NewBidMessage } from "./new-bid.ts";
+import { PlayerGoingMessage } from "./player-going.ts";
 import { PlayerPassedMessage } from "./player-passed.ts";
 import { ReadyMessage as ReadyNotificationMessage } from "./ready-notif.ts";
 import { SendCardsMessage } from "./send-cards.ts";
@@ -28,7 +29,8 @@ export type IncomingMessage =
   | PlayerPassedMessage
   | ChoosingCardsMessage
   | GameStateMessage
-  | GameTypeMessage;
+  | GameTypeMessage
+  | PlayerGoingMessage;
 
 export type IncomingMessageType = IncomingMessage["type"];
 
@@ -58,9 +60,25 @@ export interface ChooseGameTypeMessage extends BaseMessage {
   };
 }
 
+export interface RespondToGameTypeMessage extends BaseMessage {
+  type: "game-respond";
+  payload: {
+    pass: boolean;
+  };
+}
+
+export interface PlayCardMessage extends BaseMessage {
+  type: "play-card";
+  payload: {
+    card: Card;
+  };
+}
+
 export type OutgoingMessage =
   | ReadyMessage
   | BidMessage
   | PassBidMessage
   | ChooseDiscardMessage
-  | ChooseGameTypeMessage;
+  | ChooseGameTypeMessage
+  | RespondToGameTypeMessage
+  | PlayCardMessage;

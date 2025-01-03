@@ -169,6 +169,8 @@ const useGameStore = create<GameStoreState & GameActions>()(
       }),
     playCard: (pid: string, card: Card) =>
       set((state) => {
+        const ind = getCardIndex(state.cards, card);
+        state.cards.splice(ind, 1);
         state.handState.playedCards[pid] = card;
       }),
     setHiddenCards: (cards: Array<Card>) =>
@@ -198,11 +200,17 @@ const useGameStore = create<GameStoreState & GameActions>()(
   }))
 );
 
-function moveCard(array1: Array<Card>, array2: Array<Card>, card: Card) {
+function getCardIndex(array: Array<Card>, card: Card): number {
   /* TODO: Ugly + I hate JavaScript */
-  const ind = array1.findIndex(
+  const ind = array.findIndex(
     (c) => c.value == card.value && c.suit == card.suit
   );
+
+  return ind;
+}
+
+function moveCard(array1: Array<Card>, array2: Array<Card>, card: Card) {
+  const ind = getCardIndex(array1, card);
   if (ind > -1) {
     array1.splice(ind, 1);
     array2.push(card);

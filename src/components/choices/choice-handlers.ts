@@ -28,6 +28,17 @@ function useChoiceHandlers() {
         seq: 0,
       });
     },
+    [GameState.RespondingToGameType]: (label) => {
+      const pass = label != "Going";
+
+      send({
+        type: "game-respond",
+        payload: {
+          pass,
+        },
+        seq: 0,
+      });
+    },
   });
 
   return handlers.current;
